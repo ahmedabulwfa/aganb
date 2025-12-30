@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفريغ مبالغ (مصروف الجيب) للأجانب</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to left, #2c6e49, #4c956c);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .input-section {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-right: 5px solid #4c956c;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c6e49;
+            font-size: 18px;
+        }
+        
+        input {
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: right;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4c956c;
+        }
+        
+        button {
+            background-color: #4c956c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #2c6e49;
+        }
+        
+        .result-section {
+            background-color: #f0f7f4;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-right: 5px solid #ff9e00;
+        }
+        
+        .result-title {
+            color: #2c6e49;
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .result-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tax-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c6e49;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .calculation-steps {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-right: 5px solid #4c956c;
+        }
+        
+        .steps-title {
+            color: #2c6e49;
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .steps-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .step:last-child {
+            border-bottom: none;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background-color: #4c956c;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-left: 10px;
+            font-weight: 700;
+        }
+        
+        .step-desc {
+            display: inline;
+        }
+        
+        .formula {
+            font-family: monospace;
+            background-color: #f1f1f1;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+            display: inline-block;
+        }
+        
+        .note {
+            background-color: #fff9e6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-right: 3px solid #ff9e00;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>تفريغ مبالغ (مصروف الجيب) للأجانب</h1>
+            <div class="subtitle">حساب قيمة الضريبة على المبالغ المصروفة للأجانب </div>
+	       <h2>اعداد: د. احمد ابوالوفا </h2>
+        </header>
+        
+        <div class="content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="amount">المبلغ بالجنيه المصري:</label>
+                    <input type="number" id="amount" placeholder="أدخل المبلغ بالجنيه المصري">
+                </div>
+                <button id="calculate-btn">احسب قيمة الضريبة</button>
+            </div>
+            
+            <div class="result-section" id="result-section" style="display: none;">
+                <div class="result-title">نتيجة الحساب</div>
+                <div class="result-box">
+                    <div>قيمة الضريبة المستحقة:</div>
+                    <div class="tax-amount" id="tax-amount">0 جنيه مصري</div>
+                    <div>المبلغ الإجمالي بعد الضريبة: <span id="total-amount">0 جنيه مصري</span></div>
+                </div>
+            </div>
+            
+            <div class="calculation-steps" id="steps-section" style="display: none;">
+                <div class="steps-title">خطوات الحساب التفصيلية</div>
+                <div class="steps-content" id="steps-content">
+                    <!-- سيتم ملؤها بالخطوات ديناميكياً -->
+                </div>
+            </div>
+            
+            <div class="note">
+                ملاحظة: الحساب يتم وفقاً للتعليمات المحددة. إذا كان المبلغ أكبر من 10,000 جنيه مصري، يتم تطبيق طريقة الحساب الخاصة. إذا كان المبلغ أقل من أو يساوي 10,000 جنيه مصري، يتم ضربه مباشرة في 0.003.
+            </div>
+        </div>
+        
+        <footer>
+            © 2025 - نظام تفريغ مبالغ مصروف الجيب للأجانب
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', calculateTax);
+        document.getElementById('amount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateTax();
+            }
+        });
+        
+        function calculateTax() {
+            const amountInput = document.getElementById('amount');
+            const amount = parseFloat(amountInput.value);
+            
+            // التحقق من إدخال قيمة صحيحة
+            if (isNaN(amount) || amount <= 0) {
+                alert('الرجاء إدخال مبلغ صحيح أكبر من الصفر');
+                amountInput.focus();
+                return;
+            }
+            
+            // إظهار أقسام النتيجة والخطوات
+            document.getElementById('result-section').style.display = 'block';
+            document.getElementById('steps-section').style.display = 'block';
+            
+            let tax = 0;
+            let stepsHTML = '';
+            
+            if (amount > 10000) {
+                // الحالة الأولى: المبلغ أكبر من 10,000 جنيه
+                stepsHTML += `<div class="step"><span class="step-number">1</span><span class="step-desc">المبلغ المدخل: <span class="formula">${amount.toLocaleString('ar-EG')} جنيه مصري</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">2</span><span class="step-desc">المبلغ أكبر من 10,000 جنيه مصري، لذلك سيتم تطبيق طريقة الحساب الخاصة</span></div>`;
+                
+                // الخطوة أ: خصم 80 جنيه من الـ 10,000 الأولى
+                const firstDeduction = 80;
+                stepsHTML += `<div class="step"><span class="step-number">3</span><span class="step-desc">خصم 80 جنيه من الـ 10,000 الأولى: <span class="formula">10,000 - 80 = 9,920 جنيه</span></span></div>`;
+                
+                // الخطوة ب: خصم 50 جنيه من المبلغ الباقي
+                const remainingAmount = amount - 10000;
+                const secondDeduction = 50;
+                stepsHTML += `<div class="step"><span class="step-number">4</span><span class="step-desc">المبلغ الباقي بعد الـ 10,000 الأولى: <span class="formula">${amount.toLocaleString('ar-EG')} - 10,000 = ${remainingAmount.toLocaleString('ar-EG')} جنيه</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">5</span><span class="step-desc">خصم 50 جنيه من المبلغ الباقي: <span class="formula">${remainingAmount.toLocaleString('ar-EG')} - 50 = ${(remainingAmount - 50).toLocaleString('ar-EG')} جنيه</span></span></div>`;
+                
+                // الخطوة ت: جمع المبالغ المتبقية وإضافة 80 جنيه وضربها في 0.003
+                const remainingAfterFirst = 9920; // 10000 - 80
+                const remainingAfterSecond = remainingAmount - 50;
+                const sum = remainingAfterFirst + remainingAfterSecond + 80;
+                stepsHTML += `<div class="step"><span class="step-number">6</span><span class="step-desc">جمع المبالغ المتبقية: <span class="formula">9,920 + ${(remainingAmount - 50).toLocaleString('ar-EG')} + 80 = ${sum.toLocaleString('ar-EG')} جنيه</span></span></div>`;
+                
+                // الخطوة ث: حساب الضريبة
+                tax = sum * 0.003;
+                stepsHTML += `<div class="step"><span class="step-number">7</span><span class="step-desc">حساب الضريبة (ضرب الناتج في 0.003): <span class="formula">${sum.toLocaleString('ar-EG')} × 0.003 = ${tax.toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2})} جنيه مصري</span></span></div>`;
+                
+            } else {
+                // الحالة الثانية: المبلغ أقل من أو يساوي 10,000 جنيه
+                stepsHTML += `<div class="step"><span class="step-number">1</span><span class="step-desc">المبلغ المدخل: <span class="formula">${amount.toLocaleString('ar-EG')} جنيه مصري</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">2</span><span class="step-desc">المبلغ أقل من أو يساوي 10,000 جنيه مصري، لذلك سيتم ضربه مباشرة في 0.003</span></div>`;
+                
+                // حساب الضريبة مباشرة
+                tax = amount * 0.003;
+                stepsHTML += `<div class="step"><span class="step-number">3</span><span class="step-desc">حساب الضريبة: <span class="formula">${amount.toLocaleString('ar-EG')} × 0.003 = ${tax.toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2})} جنيه مصري</span></span></div>`;
+            }
+            
+            // تحديث عرض النتائج
+            document.getElementById('tax-amount').textContent = tax.toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' جنيه مصري';
+            document.getElementById('total-amount').textContent = (amount + tax).toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' جنيه مصري';
+            document.getElementById('steps-content').innerHTML = stepsHTML;
+            
+            // التمرير إلى النتيجة
+            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // إضافة قيمة افتراضية لتسهيل التجربة
+        document.getElementById('amount').value = 15000;
+    </script>
+</body>
+</html>
