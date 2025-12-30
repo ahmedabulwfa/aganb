@@ -81,7 +81,6 @@
             border-radius: 8px;
             font-size: 18px;
             text-align: right;
-            direction: ltr;
             transition: border-color 0.3s;
         }
         
@@ -130,35 +129,12 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         }
         
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 17px;
-        }
-        
-        .result-row:last-child {
-            border-bottom: none;
+        .tax-amount {
+            font-size: 32px;
             font-weight: 700;
             color: #2c6e49;
-            font-size: 19px;
-        }
-        
-        .result-label {
-            font-weight: 600;
-        }
-        
-        .result-value {
-            font-weight: 600;
-            direction: ltr;
-            text-align: left;
-            font-family: 'Cairo', monospace;
-        }
-        
-        .tax-amount {
-            color: #d9534f;
-            font-weight: 700;
+            text-align: center;
+            margin: 15px 0;
         }
         
         .calculation-steps {
@@ -218,15 +194,6 @@
             border-radius: 4px;
             margin: 5px 0;
             display: inline-block;
-            direction: ltr;
-            text-align: left;
-            font-family: 'Cairo', monospace;
-        }
-        
-        .english-number {
-            font-family: 'Cairo', monospace;
-            direction: ltr;
-            display: inline-block;
         }
         
         .note {
@@ -260,11 +227,6 @@
             h1 {
                 font-size: 24px;
             }
-            
-            .result-row {
-                flex-direction: column;
-                gap: 5px;
-            }
         }
     </style>
 </head>
@@ -272,9 +234,8 @@
     <div class="container">
         <header>
             <h1>تفريغ مبالغ (مصروف الجيب) للأجانب</h1>
-              <div class="subtitle">حساب قيمة الضريبة على المبالغ المصروفة للأجانب </div>
+            <div class="subtitle">حساب قيمة الضريبة على المبالغ المصروفة للأجانب </div>
 	       <h2>اعداد: د. احمد ابوالوفا </h2>
-
         </header>
         
         <div class="content">
@@ -289,18 +250,9 @@
             <div class="result-section" id="result-section" style="display: none;">
                 <div class="result-title">نتيجة الحساب</div>
                 <div class="result-box">
-                    <div class="result-row">
-                        <div class="result-label">المبلغ الأصلي:</div>
-                        <div class="result-value" id="original-amount">0 جنيه مصري</div>
-                    </div>
-                    <div class="result-row">
-                        <div class="result-label">قيمة الضريبة:</div>
-                        <div class="result-value tax-amount" id="tax-amount">0 جنيه مصري</div>
-                    </div>
-                    <div class="result-row">
-                        <div class="result-label">المبلغ بعد خصم الضريبة:</div>
-                        <div class="result-value" id="total-amount">0 جنيه مصري</div>
-                    </div>
+                    <div>قيمة الضريبة المستحقة:</div>
+                    <div class="tax-amount" id="tax-amount">0 جنيه مصري</div>
+                    <div>المبلغ الإجمالي بعد الضريبة: <span id="total-amount">0 جنيه مصري</span></div>
                 </div>
             </div>
             
@@ -312,7 +264,7 @@
             </div>
             
             <div class="note">
-                ملاحظة: الحساب يتم وفقاً للتعليمات المحددة. إذا كان المبلغ أكبر من 10,000 جنيه مصري، يتم تطبيق طريقة الحساب الخاصة. إذا كان المبلغ أقل من أو يساوي 10,000 جنيه مصري، يتم ضربه مباشرة في 0.003. المبلغ النهائي هو المبلغ الأصلي بعد خصم قيمة الضريبة.
+                ملاحظة: الحساب يتم وفقاً للتعليمات المحددة. إذا كان المبلغ أكبر من 10,000 جنيه مصري، يتم تطبيق طريقة الحساب الخاصة. إذا كان المبلغ أقل من أو يساوي 10,000 جنيه مصري، يتم ضربه مباشرة في 0.003.
             </div>
         </div>
         
@@ -328,18 +280,6 @@
                 calculateTax();
             }
         });
-        
-        // دالة لتنسيق الأرقام بالإنجليزية
-        function formatEnglishNumber(num) {
-            return num.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        }
-        
-        function formatEnglishNumberNoDecimal(num) {
-            return num.toLocaleString('en-US');
-        }
         
         function calculateTax() {
             const amountInput = document.getElementById('amount');
@@ -361,7 +301,7 @@
             
             if (amount > 10000) {
                 // الحالة الأولى: المبلغ أكبر من 10,000 جنيه
-                stepsHTML += `<div class="step"><span class="step-number">1</span><span class="step-desc">المبلغ المدخل: <span class="formula">${formatEnglishNumber(amount)} جنيه مصري</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">1</span><span class="step-desc">المبلغ المدخل: <span class="formula">${amount.toLocaleString('ar-EG')} جنيه مصري</span></span></div>`;
                 stepsHTML += `<div class="step"><span class="step-number">2</span><span class="step-desc">المبلغ أكبر من 10,000 جنيه مصري، لذلك سيتم تطبيق طريقة الحساب الخاصة</span></div>`;
                 
                 // الخطوة أ: خصم 80 جنيه من الـ 10,000 الأولى
@@ -371,36 +311,32 @@
                 // الخطوة ب: خصم 50 جنيه من المبلغ الباقي
                 const remainingAmount = amount - 10000;
                 const secondDeduction = 50;
-                stepsHTML += `<div class="step"><span class="step-number">4</span><span class="step-desc">المبلغ الباقي بعد الـ 10,000 الأولى: <span class="formula">${formatEnglishNumber(amount)} - 10,000 = ${formatEnglishNumberNoDecimal(remainingAmount)} جنيه</span></span></div>`;
-                stepsHTML += `<div class="step"><span class="step-number">5</span><span class="step-desc">خصم 50 جنيه من المبلغ الباقي: <span class="formula">${formatEnglishNumberNoDecimal(remainingAmount)} - 50 = ${formatEnglishNumberNoDecimal(remainingAmount - 50)} جنيه</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">4</span><span class="step-desc">المبلغ الباقي بعد الـ 10,000 الأولى: <span class="formula">${amount.toLocaleString('ar-EG')} - 10,000 = ${remainingAmount.toLocaleString('ar-EG')} جنيه</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">5</span><span class="step-desc">خصم 50 جنيه من المبلغ الباقي: <span class="formula">${remainingAmount.toLocaleString('ar-EG')} - 50 = ${(remainingAmount - 50).toLocaleString('ar-EG')} جنيه</span></span></div>`;
                 
                 // الخطوة ت: جمع المبالغ المتبقية وإضافة 80 جنيه وضربها في 0.003
                 const remainingAfterFirst = 9920; // 10000 - 80
                 const remainingAfterSecond = remainingAmount - 50;
                 const sum = remainingAfterFirst + remainingAfterSecond + 80;
-                stepsHTML += `<div class="step"><span class="step-number">6</span><span class="step-desc">جمع المبالغ المتبقية: <span class="formula">9,920 + ${formatEnglishNumberNoDecimal(remainingAmount - 50)} + 80 = ${formatEnglishNumberNoDecimal(sum)} جنيه</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">6</span><span class="step-desc">جمع المبالغ المتبقية: <span class="formula">9,920 + ${(remainingAmount - 50).toLocaleString('ar-EG')} + 80 = ${sum.toLocaleString('ar-EG')} جنيه</span></span></div>`;
                 
                 // الخطوة ث: حساب الضريبة
                 tax = sum * 0.003;
-                stepsHTML += `<div class="step"><span class="step-number">7</span><span class="step-desc">حساب الضريبة (ضرب الناتج في 0.003): <span class="formula">${formatEnglishNumberNoDecimal(sum)} × 0.003 = ${formatEnglishNumber(tax)} جنيه مصري</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">7</span><span class="step-desc">حساب الضريبة (ضرب الناتج في 0.003): <span class="formula">${sum.toLocaleString('ar-EG')} × 0.003 = ${tax.toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2})} جنيه مصري</span></span></div>`;
                 
             } else {
                 // الحالة الثانية: المبلغ أقل من أو يساوي 10,000 جنيه
-                stepsHTML += `<div class="step"><span class="step-number">1</span><span class="step-desc">المبلغ المدخل: <span class="formula">${formatEnglishNumber(amount)} جنيه مصري</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">1</span><span class="step-desc">المبلغ المدخل: <span class="formula">${amount.toLocaleString('ar-EG')} جنيه مصري</span></span></div>`;
                 stepsHTML += `<div class="step"><span class="step-number">2</span><span class="step-desc">المبلغ أقل من أو يساوي 10,000 جنيه مصري، لذلك سيتم ضربه مباشرة في 0.003</span></div>`;
                 
                 // حساب الضريبة مباشرة
                 tax = amount * 0.003;
-                stepsHTML += `<div class="step"><span class="step-number">3</span><span class="step-desc">حساب الضريبة: <span class="formula">${formatEnglishNumber(amount)} × 0.003 = ${formatEnglishNumber(tax)} جنيه مصري</span></span></div>`;
+                stepsHTML += `<div class="step"><span class="step-number">3</span><span class="step-desc">حساب الضريبة: <span class="formula">${amount.toLocaleString('ar-EG')} × 0.003 = ${tax.toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2})} جنيه مصري</span></span></div>`;
             }
             
-            // حساب المبلغ بعد خصم الضريبة
-            const amountAfterTax = amount - tax;
-            
             // تحديث عرض النتائج
-            document.getElementById('original-amount').textContent = formatEnglishNumber(amount) + ' جنيه مصري';
-            document.getElementById('tax-amount').textContent = formatEnglishNumber(tax) + ' جنيه مصري';
-            document.getElementById('total-amount').textContent = formatEnglishNumber(amountAfterTax) + ' جنيه مصري';
+            document.getElementById('tax-amount').textContent = tax.toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' جنيه مصري';
+            document.getElementById('total-amount').textContent = (amount + tax).toLocaleString('ar-EG', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' جنيه مصري';
             document.getElementById('steps-content').innerHTML = stepsHTML;
             
             // التمرير إلى النتيجة
